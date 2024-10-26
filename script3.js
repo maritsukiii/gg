@@ -7,26 +7,27 @@ document.addEventListener('DOMContentLoaded', function () {
             function updateLyrics() {
                 const currentTime = audioPlayer.currentTime;
 
-                for (let i = 0; i < lyricsLines.length; i++) {
-                    const lineTime = parseFloat(lyricsLines[i].getAttribute('data-time'));
-                    const nextLineTime = lyricsLines[i + 1] ? parseFloat(lyricsLines[i + 1].getAttribute('data-time')) : Infinity;
+                window.requestAnimationFrame(() => {
+                    for (let i = 0; i < lyricsLines.length; i++) {
+                        const lineTime = parseFloat(lyricsLines[i].getAttribute('data-time'));
+                        const nextLineTime = lyricsLines[i + 1] ? parseFloat(lyricsLines[i + 1].getAttribute('data-time')) : Infinity;
 
-                    if (currentTime >= lineTime && currentTime < nextLineTime) {
-                        if (lastActiveIndex !== i) {
-                            if (lastActiveIndex !== -1) {
-                                lyricsLines[lastActiveIndex].classList.remove('active');
+                        if (currentTime >= lineTime && currentTime < nextLineTime) {
+                            if (lastActiveIndex !== i) {
+                                if (lastActiveIndex !== -1) {
+                                    lyricsLines[lastActiveIndex].classList.remove('active');
+                                }
+                                lyricsLines[i].classList.add('active');
+                                lyricsLines[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                lastActiveIndex = i;
                             }
-                            lyricsLines[i].classList.add('active');
-                            lyricsLines[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            lastActiveIndex = i;
                         }
                     }
-                }
+                });
             }
 
             audioPlayer.addEventListener('timeupdate', updateLyrics);
         });
-
    // Получаем элемент уведомления
    const notification = document.getElementById('fullscreen-notification');
 
